@@ -5,19 +5,28 @@ const authenticate = require("mm-authenticate")(mongoose);
 const { send } = require("micro");
 const { router, get } = require("microrouter");
 const { Script, Match } = require("mm-schemas")(mongoose);
+const fetch = require("node-fetch");
 
 mongoose.connect(process.env.MONGO_URL);
 mongoose.Promise = global.Promise;
 
 const getStatsForScript = async (req, res, key) => {
   console.log(`${req.user.name} - Getting matches for ${key}`);
-  const matches = await Match.find({ key: { $regex: key } }).exec();
+  const matchesReq = await fetch(
+    `https://matches.mechmania.io/matches/${key}`,
+    {
+      headers: {
+        Authorization: `Bearer ${req.user.token}`
+      }
+    }
+  );
+  const matches = await matchesReq.json();
   console.log(`${req.user.name} - Calculating Wins/Losses`);
   let wins = 0;
   let losses = 0;
   let ties = 0;
-  matches.forEach(({ key, winner }) => {
-    const p2 = key.split(":")[1];
+  matches.forEach(({ match: { key: matchKey, winner } }) => {
+    const p2 = matchKey.split(":")[1];
     if (winner === 3) {
       ties++;
     } else if (p2 === key) {
