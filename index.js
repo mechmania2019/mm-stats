@@ -2,10 +2,11 @@ const { promisify } = require("util");
 
 const mongoose = require("mongoose");
 const authenticate = require("mm-authenticate")(mongoose);
-const { send } = require("micro");
 const { router, get } = require("microrouter");
 const { Script, Match } = require("mm-schemas")(mongoose);
 const fetch = require("node-fetch");
+
+const send = (res, status, data) => (res.statusCode = status, res.end(data));
 
 mongoose.connect(process.env.MONGO_URL);
 mongoose.Promise = global.Promise;
