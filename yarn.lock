@@ -90,15 +90,17 @@ micro@9.1.0:
     mri "1.1.0"
     raw-body "2.3.2"
 
-microrouter@^3.1.3:
+microrouter@3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/microrouter/-/microrouter-3.1.3.tgz#1e45df77d3e2d773be5da129cfc7d5e6e6c86f4e"
+  integrity sha1-HkXfd9Pi13O+XaEpz8fV5ubIb04=
   dependencies:
     url-pattern "^1.0.3"
 
-mm-authenticate@0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/mm-authenticate/-/mm-authenticate-0.0.6.tgz#bebb63fa3a358118f0de24b562d84be093168b2c"
+mm-authenticate@0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/mm-authenticate/-/mm-authenticate-0.0.7.tgz#882ec5fa430eb8f805227ffb3a242a916022d13d"
+  integrity sha512-oSeMXH6+X9OzQu1iEn+r1zB1w1vC10tYSbEzGtBHSYQ1KS/9F+bMBrpLwppvrGgUEcOvz50RvuucuRq5pk5q8w==
   dependencies:
     micro "9.1.0"
     mm-schemas "0.0.6"
@@ -106,6 +108,16 @@ mm-authenticate@0.0.6:
 mm-schemas@0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/mm-schemas/-/mm-schemas-0.0.6.tgz#61c3a0b676bac36f2d8915bd285ae22fbdda8b08"
+  dependencies:
+    cuid "2.1.4"
+    mongoose "5.0.7"
+    mongoose-timestamp "0.6.0"
+    validator "9.4.1"
+
+mm-schemas@0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/mm-schemas/-/mm-schemas-0.0.7.tgz#21b72b2e49b32312ad989d7c120667a003e98035"
+  integrity sha512-DWsWZ5JtPNtl9B0Mxr8HSF9+6Az7hngfwD17QA2RfQazGyQqRQmzYHKsjVGUOmOAZkSmOn0D4HWasPE2dGzjaA==
   dependencies:
     cuid "2.1.4"
     mongoose "5.0.7"
