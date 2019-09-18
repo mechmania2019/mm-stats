@@ -2,13 +2,13 @@ const { promisify } = require("util");
 
 const mongoose = require("mongoose");
 const authenticate = require("mm-authenticate")(mongoose);
-const { router, get } = require("microrouter");
 const { Script, Match } = require("mm-schemas")(mongoose);
 const fetch = require("node-fetch");
+const url = require("url");
 
 const send = (res, status, data) => (res.statusCode = status, res.end(data));
 
-mongoose.connect(process.env.MONGO_URL);
+mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true});
 mongoose.Promise = global.Promise;
 
 const getStatsForScript = async (req, res, key) => {
@@ -46,19 +46,31 @@ const getStatsForScript = async (req, res, key) => {
       }
     }
   });
-  return send(res, 200, { wins, losses, ties });
+  return send(res, 200, JSON.stringify({ wins, losses, ties }));
 };
 
 module.exports = authenticate(
-  router(
-    get("/", async (req, res) => {
-      const team = req.user;
-      console.log(`${team.name} - Getting script`);
-      const script = await Script.findById(team.latestScript).exec();
-      return getStatsForScript(req, res, script.key);
-    }),
-    get("/:script", async (req, res) =>
-      getStatsForScript(req, res, req.params.script)
-    )
-  )
+  async (req, res) => {
+    console.log(req.url); // "/", "/id" 
+    if (req.url.pathname === "/") {
+      async (req, res) => {
+        const team = req.user;
+        console.log(`${team.name} - Getting script`);
+        const script = await Script.findById(team.latestScript).exec();
+        return getStatsForScript(req, res, script.key);
+      }
+    } else {
+      getStatsForScript(req, res, req.params.script);
+    }
+  }
 );
+      // router(
+      //   get("/", async (req, res) => {
+      //     const team = req.user;
+      //     console.log(`${team.name} - Getting script`);
+      //     const script = await Script.findById(team.latestScript).exec();
+      //     return getStatsForScript(req, res, script.key);
+      //   }),
+      //   get("/:script", async (req, res) =>
+      //     getStatsForScript(req, res, req.params.script)
+      //   )
