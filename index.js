@@ -8,7 +8,7 @@ const url = require("url");
 
 const send = (res, status, data) => (res.statusCode = status, res.end(data));
 
-mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true});
+mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 mongoose.Promise = global.Promise;
 
 const getStatsForScript = async (req, res, key) => {
@@ -28,7 +28,7 @@ const getStatsForScript = async (req, res, key) => {
   let ties = 0;
   matches.forEach(({ match: { key: matchKey, winner } }) => {
     const p2 = matchKey.split(":")[1];
-    if (winner === 3) {
+    if (winner === 0) {
       ties++;
     } else if (p2 === key) {
       // Logged in player was p2;
@@ -52,15 +52,14 @@ const getStatsForScript = async (req, res, key) => {
 module.exports = authenticate(
   async (req, res) => {
     console.log(req.url); // "/", "/id" 
-    if (req.url.pathname === "/") {
-      async (req, res) => {
-        const team = req.user;
-        console.log(`${team.name} - Getting script`);
-        const script = await Script.findById(team.latestScript).exec();
-        return getStatsForScript(req, res, script.key);
-      }
+    if (req.url.startsWith("/")) {
+      const team = req.user;
+      console.log(team);
+      console.log(`${team.name} - Getting script`);
+      const script = await Script.findById(team.latestScript).exec();
+      return getStatsForScript(req, res, script.key);
     } else {
-      getStatsForScript(req, res, req.pathname.slice(1));
+      getStatsForScript(req, res, req.url.slice(1));
     }
   }
 );
