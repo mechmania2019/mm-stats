@@ -49,14 +49,17 @@ const getStatsForScript = async (req, res, key) => {
 module.exports = authenticate(
   async (req, res) => {
     console.log(req.url); // "/", "/id" 
-    if (req.url.startsWith("/")) {
+    if (req.url === "/") {
+      // url is "/"
       const team = req.user;
       console.log(team);
       console.log(`${team.name} - Getting script`);
       const script = await Script.findById(team.latestScript).exec();
       return getStatsForScript(req, res, script.key);
     } else {
-      getStatsForScript(req, res, req.url.slice(1));
+      // url is "/something"
+      const script = req.url.slice(1);
+      getStatsForScript(req, res, script);
     }
   }
 );
