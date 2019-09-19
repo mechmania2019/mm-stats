@@ -1,10 +1,7 @@
-const { promisify } = require("util");
-
 const mongoose = require("mongoose");
 const authenticate = require("mm-authenticate")(mongoose);
 const { Script, Match } = require("mm-schemas")(mongoose);
 const fetch = require("node-fetch");
-const url = require("url");
 
 const send = (res, status, data) => (res.statusCode = status, res.end(data));
 
@@ -63,13 +60,3 @@ module.exports = authenticate(
     }
   }
 );
-      // router(
-      //   get("/", async (req, res) => {
-      //     const team = req.user;
-      //     console.log(`${team.name} - Getting script`);
-      //     const script = await Script.findById(team.latestScript).exec();
-      //     return getStatsForScript(req, res, script.key);
-      //   }),
-      //   get("/:script", async (req, res) =>
-      //     getStatsForScript(req, res, req.params.script)
-      //   )
