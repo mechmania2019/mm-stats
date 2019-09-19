@@ -8,7 +8,7 @@ const url = require("url");
 
 const send = (res, status, data) => (res.statusCode = status, res.end(data));
 
-mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true});
+mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true});
 mongoose.Promise = global.Promise;
 
 const getStatsForScript = async (req, res, key) => {
@@ -60,7 +60,7 @@ module.exports = authenticate(
         return getStatsForScript(req, res, script.key);
       }
     } else {
-      getStatsForScript(req, res, req.params.script);
+      getStatsForScript(req, res, req.pathname.slice(1));
     }
   }
 );
