@@ -48,10 +48,14 @@ const getStatsForScript = async (req, res, key) => {
 
 module.exports = authenticate(
   async (req, res) => {
+    const team = req.user;
+    if (!team.admin) {
+      send(res, 403, "Forbidden");
+      return;
+    }
     console.log(req.url); // "/", "/id" 
     if (req.url === "/") {
       // url is "/"
-      const team = req.user;
       console.log(team);
       console.log(`${team.name} - Getting script`);
       const script = await Script.findById(team.latestScript).exec();
